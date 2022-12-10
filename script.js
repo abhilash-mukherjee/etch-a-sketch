@@ -2,6 +2,11 @@ const container = document.querySelector('.content');
 const input = document.querySelector('input');
 const btn = document.querySelector('button');
 const initialGridNumber = 16;
+let isMouseDown = false;
+window.onmousedown = ()=>isMouseDown = true;
+window.onmouseup = ()=>isMouseDown = false;
+container.appendChild(getNewGrid(initialGridNumber));
+btn.addEventListener('click',updateGrid);
 
 function createGridHolder()
 {
@@ -13,8 +18,6 @@ function createGridHolder()
     return gridHolder;
 }
 
-container.appendChild(getNewGrid(initialGridNumber));
-btn.addEventListener('click',updateGrid)
 function updateGrid()
 {
     let newGridNumber = parseInt(input.value);
@@ -28,6 +31,7 @@ function updateGrid()
         container.appendChild(getNewGrid(newGridNumber));
     }
 }
+
 function getNewGrid(gridNumber)
 {
     let gridHolder = createGridHolder();
@@ -47,9 +51,17 @@ function getNewGrid(gridNumber)
             childDiv.style.border = '1px black solid';
             childDiv.style.backgroundColor = `yellow`;
             childDiv.style.flex = '1 1 auto';
+            childDiv.addEventListener('mouseenter',paintWhite);
             div.appendChild(childDiv);
         }
         gridHolder.appendChild(div);
     }
     return gridHolder;
+}
+
+function paintWhite(e)
+{
+    if(!isMouseDown) return;
+    console.log("mouse entered")
+    e.target.style.backgroundColor = 'white';
 }
